@@ -18,7 +18,7 @@ public:
     Error() = default;
     Error(const Position& pos_start, const Position& pos_end, ErrorType errorType, std::string details)
         : _start(pos_start), _end(pos_end), _err(errorType), _details(std::move(details)) {}
-    virtual ~Error() = 0;
+    virtual ~Error() = default;
 
     Error(const Error& other) = default;
     Error& operator=(const Error& other) = default;
@@ -37,12 +37,14 @@ protected:
     static std::string beautify_string(const std::string& text, const Position& pos_start, const Position& pos_end);
 };
 
-class IllegalCharError : Error {
+class IllegalCharError : public Error {
+public:
     IllegalCharError(const Position& pos_start, const Position& pos_end, std::string details)
         : Error(pos_start, pos_end, ErrorType::IllegalCharError, std::move(details)) {}
 };
 
-class InvalidSyntaxError : Error {
+class InvalidSyntaxError : public Error {
+public:
     InvalidSyntaxError(const Position& pos_start, const Position& pos_end, std::string details)
         : Error(pos_start, pos_end, ErrorType::InvalidSyntaxError, std::move(details)) {}
 };
